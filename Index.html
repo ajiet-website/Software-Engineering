@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PTU Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .form-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            width: 250px;
+            max-width: 90%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #resultSection {
+            display: none;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+
+        .just {
+            color: orange;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            input[type="text"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PTU Results</h1>
+
+    <div class="form-container">
+        <label for="usnInput">Enter USN:</label><br>
+        <input type="text" id="usnInput" placeholder="e.g. 4JK23CI000">
+        <button onclick="showResult()">Submit</button>
+    </div>
+
+    <div id="resultSection">
+        <table>
+            <thead>
+                <tr>
+                    <th>USN</th>
+                    <th>Name</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="resultBody">
+                <!-- Result row will appear here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const students = [
+            { usn: "4JK23CI001", name: "Adithya Raja anil", result: "Pass" },
+            { usn: "4JK23CI002", name: "Abdu Rahman P N", result: "pass" },
+            { usn: "4JK23CI005", name: "Adithya Jayan", result: "fail" },
+            { usn: "4JK23CI006", name: "Adithyan M", result: "Fail" },
+            { usn: "4JK23CI007", name: "Aditi Attupuram", result: "fail" },
+            { usn: "4JK23CI008", name: "Ajay Manjunath Gowda", result: "pass" },
+            { usn: "4JK23CI009", name: "Akash  R Chandran", result: "Pass" },
+            { usn: "4JK23CI011", name: "Amisha Kotian", result: "Fail" },
+            { usn: "4JK23CI012", name: "Ananya", result: "Fail" },
+            { usn: "4JK23CI013", name: "Ananya", result: "Pass" },
+            { usn: "4JK23CI014", name: "Anushri K R", result: "Pass" },
+            { usn: "4JK23CI015", name: "Arelene Kanattu Regi", result: "Pass" },
+            { usn: "4JK23CI016", name: "Ashaya A K", result: "Fail" },
+            { usn: "4JK23CI017", name: "Ashwin Prakash C", result: "Fail" },
+            { usn: "4JK23CI018", name: "Bhuvanashree K", result: "Pass" },
+            { usn: "4JK23CI019", name: "Chethan C Malli", result: "Pass" },
+            { usn: "4JK23CI020", name: "D M Moidin Mashook", result: "Fail" },
+            { usn: "4JK23CI021", name: "Dhyan Gatty", result: "Pass" },
+            { usn: "4JK23CI022", name: "famil v", result: "Fail" },
+            { usn: "4JK23CI023", name: "Grahith Rao", result: "Pass" },
+            { usn: "4JK23CI024", name: "Haneen", result: "Pass" },
+            { usn: "4JK23CI025", name: "Harsha", result: "Pass" },
+            { usn: "4JK23CI026", name: "harshith", result: "Fail" },
+            { usn: "4JK23CI027", name: "joseph", result: "Fail" },
+            { usn: "4JK23CI028", name: "Kavan Shetty", result: "Pass" },
+            { usn: "4JK23CI029", name: "Mazin", result: "Pass" },
+            { usn: "4JK23CI030", name: "Mishal", result: "Fail" },
+            { usn: "4JK23CI031", name: "Mohammed Aiman Afzal", result: "Pass" },
+            { usn: "4JK23CI032", name: "Monisha", result: "Fail" },
+            { usn: "4JK23CI033", name: "Nandana G", result: "Fail" },
+            { usn: "4JK23CI034", name: "Navyashri U H", result: "Pass" },
+            { usn: "4JK23CI035", name: "Neha Sunil", result: "Pass" },
+            { usn: "4JK23CI036", name: "Pooja", result: "Fail" },
+            { usn: "4JK23CI037", name: "Prajwal R Poojary", result: "Fail" },
+            { usn: "4JK23CI038", name: "Prajwal R Shetty", result: "Pass" },
+            { usn: "4JK23CI039", name: "Pranam Shetty B D", result: "Fail" },
+            { usn: "4JK23CI040", name: "Pratham", result: "Pass" },
+            { usn: "4JK23CI041", name: "Pratheek shetty", result: "Fail" },
+            { usn: "4JK23CI042", name: "Pratheksha s naik", result: "Pass" },
+            { usn: "4JK23CI043", name: "Prayag babu", result: "Fail" },
+            { usn: "4JK23CI044", name: "Rohit talekar", result: "Fail" },
+            { usn: "4JK23CI045", name: "S V Rajeshwari", result: "Fail" },
+            { usn: "4JK23CI046", name: "Sameeksha uday shetty", result: "Pass" },
+            { usn: "4JK23CI047", name: "Sandesh", result: "Fail" },
+            { usn: "4JK23CI048", name: "Sanjana rao", result: "Pass" },
+            { usn: "4JK23CI049", name: "Shaz omar", result: "pass" },
+            { usn: "4JK23CI050", name: "Sharanya", result: "Fail" },
+            { usn: "4JK23CI051", name: "Sharanya k", result: "Fail" },
+            { usn: "4JK23CI052", name: "Shiea  S shutty", result: "Fail" },
+            { usn: "4JK23CI053", name: "Shravyashree M S", result: "Fail" },
+            { usn: "4JK23CI054", name: "Shreyank", result: "Pass" },
+            { usn: "4JK23CI055", name: "Sidharth santhosha", result: "Fail" },
+            { usn: "4JK23CI056", name: "Shyam krishna", result: "Pass" },
+            { usn: "4JK23CI057", name: "Thanvi", result: "Fail" },
+            { usn: "4JK23CI058", name: "U K Ahamed Shafeel", result: "Pass" },
+            { usn: "4JK23CI059", name: "Venkat Sai", result: "Fail" },
+            { usn: "4JK23CI060", name: "Vilas Raj", result: "Pass" },
+            { usn: "4JK23CI061", name: "Vishnu B", result: "Fail" },
+            { usn: "4JK23CI063", name: "Yashwantha Y", result: "Just Pass" }
+        ];
+
+        function showResult() {
+            const input = document.getElementById('usnInput').value.trim().toUpperCase();
+            const resultBody = document.getElementById('resultBody');
+            const resultSection = document.getElementById('resultSection');
+
+            resultBody.innerHTML = '';
+
+            const student = students.find(s => s.usn === input);
+
+            if (student) {
+                let resultClass = 'fail';
+                const resultText = student.result.toLowerCase();
+                if (resultText.includes('pass') && !resultText.includes('fail')) {
+                    resultClass = resultText === 'just pass' ? 'just' : 'pass';
+                }
+
+                const row = `<tr>
+                    <td>${student.usn}</td>
+                    <td>${student.name}</td>
+                    <td class="${resultClass}">${student.result}</td>
+                </tr>`;
+                resultBody.innerHTML = row;
+            } else {
+                resultBody.innerHTML = `<tr><td colspan="3">No result found for USN: ${input}</td></tr>`;
+            }
+
+            resultSection.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
